@@ -1,51 +1,49 @@
 import { useState } from "react";
 
-import AddProject from "./components/AddProject.jsx";
-import ProjectDetails from "./components/ProjectDetail.jsx";
-import ProjectDisplay from "./components/ProjectDisplay.jsx";
+import ProjectsSidebar from "./components/ProjectsSidebar.jsx";
+import NewProject from "./components/NewProject.jsx";
+import NoProjectSelected from "./components/NoProjectSelected.jsx";
 
 function App() {
-  const [addProject, setAddProjeect] = useState(false);
-  // const [listOfProject, setListOfProject] = useState([]);
-  const [projectDetails, setProjectDetails] = useState({
-    title: "",
-    descprition: "",
-    date: "",
+  const [projectsState, setProjectsState] = useState({
+    selectedProjectId: undefined,
+    projects: [],
   });
 
-  function updateProjectDetails(projectTitle, projectDescription, projectDate) {
-    setProjectDetails((prevValues) => {
+  function handleStartAddProject() {
+    setProjectsState((prevState) => {
       return {
-        ...prevValues,
-        title: projectTitle.current.value,
-        descprition: projectDescription.current.value,
-        date: projectDate.current.value,
+        ...prevState,
+        selectedProjectId: null,
       };
     });
-    setAddProjeect(false);
-    console.log(projectDetails);
+  }
+  function handleAddProject(projectData) {
+    const newProject = {
+      ...projectData,
+      id: Math.random(),
+    };
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        projects: [...prevState.projects, newProject],
+      };
+    });
   }
 
-  function handleChange() {
-    setAddProjeect(true);
-  }
-  function handleCancel() {
-    setAddProjeect(false);
-  }
+  console.log(projectsState);
 
+  let content;
+
+  if (projectsState.selectedProjectId === null) {
+    content = <NewProject onAdd={handleAddProject} />;
+  } else if (projectsState.selectedProjectId === undefined) {
+    content = <NoProjectSelected onStartAddProject={handleStartAddProject} />;
+  }
   return (
-    <main className="flex flex-row">
-      <AddProject onChange={handleChange} />
-      <div className=" w-3/4">
-        {addProject ? (
-          <ProjectDetails
-            updateProject={updateProjectDetails}
-            onCancel={handleCancel}
-          />
-        ) : (
-          <ProjectDisplay onChange={handleChange} />
-        )}
-      </div>
+    <main className="h-screen my-8 flex gap-8">
+      <ProjectsSidebar onStartAddProject={handleStartAddProject} />
+      {content}
     </main>
   );
 }
