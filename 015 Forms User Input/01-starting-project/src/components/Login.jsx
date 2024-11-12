@@ -1,34 +1,25 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export default function Login() {
-  const [eneteredValues, setEnteredValues] = useState({
-    email: "",
-    password: "",
-  });
-  // const [eneteredEmail, setEnteredEmail] = useState("");
-  // const [eneteredPassword, setEnteredPassword] = useState("");
+  const [emailIsInvalid, setEmailIsInvalid] = useState(false);
+
+  const email = useRef();
+  const password = useRef();
 
   function handleSubmit(event) {
     event.preventDefault();
-    // console.log("User email: " + eneteredEmail);
-    // console.log("User password: " + eneteredPassword);
-    console.log("User email: " + eneteredValues.email);
-    console.log("User password: " + eneteredValues.password);
-    console.log(eneteredValues);
-  }
+    const enteredEmail = email.current.value;
+    const enteredPassword = password.current.value;
 
-  function handleInputChange(identifier, value) {
-    setEnteredValues((prevValues) => ({
-      ...prevValues,
-      [identifier]: value,
-    }));
-  }
+    const emailIsValid = enteredEmail.includes("@");
 
-  function handleEmailChange(event) {
-    setEnteredEmail(event.target.value);
-  }
-  function handlePasswordChange(event) {
-    setEnteredPassword(event.target.value);
+    if (!emailIsValid) {
+      setEmailIsInvalid(true);
+      return;
+    }
+    setEmailIsInvalid(false);
+
+    console.log("This code won't execute if email is invalid");
   }
 
   return (
@@ -38,30 +29,15 @@ export default function Login() {
       <div className="control-row">
         <div className="control no-margin">
           <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            name="email"
-            // onChange={handleEmailChange}
-            // value={eneteredEmail}
-            onChange={(event) => handleInputChange("email", event.target.value)}
-            value={eneteredValues.email}
-          />
+          <input id="email" type="email" name="email" ref={email} />
+          <div className="control-error">
+            {emailIsInvalid && <p>Please enter a valid email address.</p>}
+          </div>
         </div>
 
         <div className="control no-margin">
           <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            name="password"
-            // onChange={handlePasswordChange}
-            // value={eneteredPassword}
-            onChange={(event) =>
-              handleInputChange("password", event.target.value)
-            }
-            value={eneteredValues.password}
-          />
+          <input id="password" type="password" name="password" ref={password} />
         </div>
       </div>
 
