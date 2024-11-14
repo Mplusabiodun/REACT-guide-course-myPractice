@@ -1,13 +1,19 @@
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
+// import UserProgressContext from '../../store/UserProgressContext.jsx'
 
 export default function ({ children, open, className = "" }) {
+  // const userProgressCxt = useContext(UserProgressContext)
   const dialog = useRef();
 
   useEffect(() => {
+    const modal = dialog.current;
+
     if (open) {
-      dialog.current.showModal();
+      modal.showModal();
     }
+
+    return () => modal.close();
   }, [open]);
 
   return createPortal(
