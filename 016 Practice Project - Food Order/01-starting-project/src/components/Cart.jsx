@@ -14,13 +14,20 @@ export default function () {
   function handleCloseCart() {
     userProgressCtx.hideCart();
   }
+  function handleGoToCheckout() {
+    userProgressCtx.showCheckout();
+  }
 
   const cartTotal = cartCtx.items.reduce(
     (totalPrice, item) => totalPrice + item.quantity * item.price,
     0
   );
   return (
-    <Modal className="cart" open={userProgressCtx.progress === "cart"}>
+    <Modal
+      className="cart"
+      open={userProgressCtx.progress === "cart"}
+      onClose={userProgressCtx.progress === "cart" ? handleCloseCart : null}
+    >
       <ul>
         {cartCtx.items.map((item) => (
           <CartItem
@@ -42,7 +49,10 @@ export default function () {
         <Button textOnly onClick={handleCloseCart}>
           Close
         </Button>
-        <Button onClick={handleCloseCart}>Go to Checkout</Button>
+
+        {cartCtx.items.length > 0 && (
+          <Button onClick={handleGoToCheckout}>Go to Checkout</Button>
+        )}
       </p>
     </Modal>
   );

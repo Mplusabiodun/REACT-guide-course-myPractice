@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 // import UserProgressContext from '../../store/UserProgressContext.jsx'
 
-export default function ({ children, open, className = "" }) {
+export default function ({ children, open, onClose, className = "" }) {
   // const userProgressCxt = useContext(UserProgressContext)
   const dialog = useRef();
 
@@ -17,7 +17,7 @@ export default function ({ children, open, className = "" }) {
   }, [open]);
 
   return createPortal(
-    <dialog ref={dialog} className={`modal ${className}`}>
+    <dialog ref={dialog} className={`modal ${className}`} onClose={onClose}>
       {children}
     </dialog>,
     document.getElementById("modal")
