@@ -25,6 +25,7 @@ export default function () {
     error,
     isLoading: isSending,
     sendRequest,
+    clearData,
   } = useHttp("http://localhost:3000/orders", requestConfig);
 
   const cartTotal = cartCtx.items.reduce(
@@ -34,6 +35,12 @@ export default function () {
 
   function handleCloseModal() {
     userProgressCtx.hideCheckout();
+  }
+
+  function handleFinish() {
+    userProgressCtx.hideCheckout();
+    cartCtx.clearCart();
+    clearData();
   }
 
   function handleSubmit(event) {
@@ -69,16 +76,16 @@ export default function () {
     return (
       <Modal
         open={userProgressCtx.progress === "checkout"}
-        onClose={handleCloseModal}
+        onClose={handleFinish}
       >
         <h2>Success!</h2>
         <p>Your order was submitted successfully.</p>
         <p>
-          We will gt back to you with more details via email within the next few
-          minutes.
+          We will get back to you with more details via email within the next
+          few minutes.
         </p>
         <p className="modal-actions">
-          <Button onClick={handleCloseModal}>Okay</Button>
+          <Button onClick={handleFinish}>Okay</Button>
         </p>
       </Modal>
     );
