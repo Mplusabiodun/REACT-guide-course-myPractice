@@ -7,9 +7,11 @@ import EventsRootsLayout from "./pages/EventsRoot.js";
 import EventsPage, { loader as eventsLoader } from "./pages/Events.js"; // eventsLoader is alias to loader
 import EventDetailPage, {
   loader as eventDetailLoader,
+  action as eventDetailAction,
 } from "./pages/EventDetail.js";
 import NewEventPage from "./pages/NewEvent.js";
 import EditEventPage from "./pages/EditEvent.js";
+import { action as manipulateEventAction } from "./components/EventForm.js";
 
 const router = createBrowserRouter([
   {
@@ -29,11 +31,26 @@ const router = createBrowserRouter([
           },
           {
             path: ":eventId",
-            element: <EventDetailPage />,
+            id: "event-detail",
             loader: eventDetailLoader,
+            children: [
+              {
+                index: true,
+                element: <EventDetailPage />,
+                action: eventDetailAction,
+              },
+              {
+                path: "edit",
+                element: <EditEventPage />,
+                action: manipulateEventAction,
+              },
+            ],
           },
-          { path: "new", element: <NewEventPage /> },
-          { path: ":eventId/edit", element: <EditEventPage /> },
+          {
+            path: "new",
+            element: <NewEventPage />,
+            action: manipulateEventAction,
+          },
         ],
       },
     ],

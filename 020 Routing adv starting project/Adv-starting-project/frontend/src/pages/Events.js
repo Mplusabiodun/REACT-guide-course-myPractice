@@ -5,7 +5,6 @@ import EventsList from "../components/EventsList";
 function EventsPage() {
   const data = useLoaderData();
   const events = data.events;
-  console.log(events);
 
   // if (data.isError) {
   //   return <p>{data.message}</p>;
